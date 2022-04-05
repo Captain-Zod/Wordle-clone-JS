@@ -19,7 +19,7 @@ body{
     height: 420px;
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    grid-gap: 10px;
+    grid-gap: 5px;
 }
 
 .try{
@@ -28,13 +28,27 @@ body{
     grid-gap: 5px;
 }
 
+.letter[status='empty']{
+    background-color: white;
+    border-color: silver;
+}
+
+.letter[status='written']{
+    color: black;
+    border-color: black;
+}
+
+.letter[status='true']{
+    background-color: green;
+    color: white;
+    border-color: black;
+}
+
 .letter{
     justify-content: center;
     align-items: center;
-    border: 3px solid white;
+    border: 2px solid white;
     display: flex;
     font-size: 2rem;
     user-select: none;
-    color: white;
-    background-color: rgb(142 215 112);
 }
