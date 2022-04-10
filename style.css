@@ -30,25 +30,34 @@ body{
 
 .letter[status='empty']{
     background-color: white;
-    border-color: silver;
+    border: 2px solid silver;
 }
 
 .letter[status='written']{
     color: black;
-    border-color: black;
+    border: 2px solid black;
 }
 
-.letter[status='true']{
+.letter[status='green']{
     background-color: green;
     color: white;
-    border-color: black;
+}
+
+.letter[status='gray']{
+    background-color: gray;
+    color: white;
+}
+
+.letter[status='yellow']{
+    background-color: rgb(190, 190, 0);
+    color: white;
 }
 
 .letter{
     justify-content: center;
     align-items: center;
-    border: 2px solid white;
     display: flex;
     font-size: 2rem;
     user-select: none;
+    
 }

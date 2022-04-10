@@ -5,47 +5,74 @@ var WordContainsLetter =
     True: 2
 };
 
-function CheckGuess(answer, guess){
-    if (guess.length != answer.length)
-        throw "Exception!";
-    let answerr = answer.split('');
-    var res = [];
-    for (let i = 0; i < guess.length; i++)
-    {
-        let result;
-        let currLetter = guess[i];
-        if (!answerr.includes(currLetter))
-        {
-            result = WordContainsLetter.False;
-        }
-        else if(answerr[i] == currLetter)
-        {
-            answerr[i] = '\\';
-            result = WordContainsLetter.True;
-        }
-        else
-        {
-            answerr[answerr.indexOf(currLetter)] = '\\';
-            result = WordContainsLetter.InOtherPosition;
-        }
-        res.push({guess: currLetter, result});
-    }
-    return res;
-}
+var cellStatus =
+{
+    empty: "empty",
+    written: "written",
+    gray: "gray",
+    yellow: "yellow",
+    green: "green"
+};
+
+var letterStatus = {
+    0: cellStatus.gray,
+    1: cellStatus.yellow,
+    2: cellStatus.green
+};
 
 var WORDLE = [];
 var REGEX = new RegExp("[A-Za-z]{1}");
 var ROWS = document.getElementsByClassName("try");
 var CURRENTROWINDEX = 0;
 var gameover = false;
+const random = Math.floor(Math.random() * wp.length);
+var ANSWER = wp[random].toUpperCase();
+console.log(ANSWER);
+//a.every((val, index) => val === b[index]);
+function CheckGuess(answer, guess){
+    if (guess.length != answer.length)
+        throw "Exception!";
+    let answerr = answer.split('');
+    var temp = [];
+    for (let i = 0; i < guess.length; i++)
+    {
+        if(answerr[i] == guess[i])
+        {
+            answerr[i] = '\\';
+            temp.push({index: i, guess: guess[i], result: WordContainsLetter.True});
+        }
+    }
+
+    for (let i = 0; i < guess.length; i++)
+    {
+        if (answerr.includes(guess[i]))
+        {
+            answerr[answerr.indexOf(guess[i])] = '\\';
+            temp.push({index: i, guess: guess[i], result: WordContainsLetter.InOtherPosition});
+        }
+    }
+
+    var res = [];
+    for (let i = 0; i < guess.length; i++) {
+        let a = temp.find(item => { return item.index == i});
+        if(a == undefined)
+            res.push({index: i, guess: guess[i], result: WordContainsLetter.False});
+        else
+            res.push(a);
+    }
+    return res;
+}
 
 function getCurrentRow(){
     return ROWS[CURRENTROWINDEX];
 }
+function setCellStatus(cell, status){
+    cell.setAttribute("status", status);
+}
 
 for (let element of ROWS) {
     for (let cell of element.children) {
-        cell.setAttribute("status", "empty");
+        setCellStatus(cell, cellStatus.empty);
     }
 }
 
@@ -56,16 +83,16 @@ function addLetterToWORDLE(letter){
     WORDLE.push(letter);
     var box = getNextLetterbox();
     box.innerHTML = letter;
-    box.setAttribute("status", "written");
-    console.log(WORDLE);
+    setCellStatus(box, cellStatus.written);
+    //console.log(WORDLE);
 }
 
 function backspace(){
     var box = getNextLetterbox();
     box.innerHTML = "";
-    box.setAttribute("status", "empty");
+    setCellStatus(box, cellStatus.empty);
     WORDLE.pop();
-    console.log(WORDLE);
+    //console.log(WORDLE);
 }
 
 function keyboardPress(keyCode){
@@ -86,7 +113,6 @@ function keyboardPress(keyCode){
 }
 
 document.addEventListener('keydown', (e) => {
-    console.log(e);
     keyboardPress(e.keyCode)
   });
 
@@ -99,9 +125,14 @@ function SubmitGuess(){
         return;
     if(gameover)
         return;
-
-    for (let cell of getCurrentRow().children) {
-        cell.setAttribute("status", "true");
+    var res = CheckGuess(ANSWER, WORDLE);
+    console.log(res);
+    var array = getCurrentRow().children;
+    for (let i = 0; i < array.length; i++) {
+        let cell = array[i];
+        setTimeout(() => {
+            setCellStatus(cell, letterStatus[res[i].result]);
+        }, 300 * i);
     }
     WORDLE = [];
     if(CURRENTROWINDEX++ >= 5){
@@ -109,4 +140,3 @@ function SubmitGuess(){
         return;
     }
 }
-  
