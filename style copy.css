@@ -5,13 +5,33 @@ body{
 
 #main{
     width: 100%;
-    max-width: 500px;
+    max-width: 400px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    justify-content: center;
+    align-items: center;    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    overflow: hidden;
+}
+
+#main1{
+    width: 100%;
+    max-width: 400px;
     margin: 50px auto;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
     justify-content: center;
     align-items: center;
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    width: 0%;
+    overflow: hidden;
 }
 
 #board{
@@ -20,12 +40,6 @@ body{
     display: grid;
     grid-template-rows: repeat(6, 1fr);
     grid-gap: 5px;
-}
-
-#keyboard{
-    width: 350px;
-    bottom: 0;
-    position: absolute;
 }
 
 .try{
@@ -68,18 +82,17 @@ body{
     
 }
 
-.kboard-row{
-    display: flex;
-    width: 100%;
-    margin: 0 auto 5px;
+.zxc{
+    animation: anim 1s ;
+
 }
 
-.key{
-    flex: 1;
-    margin: 0 6px 0 0;
-    height: 50px;
-}
+@keyframes anim {
+    0%   { width: 0%; }
+    100% { width: 100%;  }
+  }
 
-.metakey{
-    flex: 1.5;
-}
+ #a{
+    max-width: 400px;
+    margin: 50px auto;
+  }

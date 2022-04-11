@@ -95,7 +95,7 @@ function backspace(){
     //console.log(WORDLE);
 }
 
-function keyboardPress(keyCode){
+function keyboardPressed(keyCode){
     if(gameover)
         return;
 
@@ -113,7 +113,7 @@ function keyboardPress(keyCode){
 }
 
 document.addEventListener('keydown', (e) => {
-    keyboardPress(e.keyCode)
+    keyboardPressed(e.keyCode)
   });
 
 function getNextLetterbox(){
@@ -138,5 +138,30 @@ function SubmitGuess(){
     if(CURRENTROWINDEX++ >= 5){
         gameover = true;
         return;
+    }
+}
+
+var buttons = document.getElementsByClassName('key');
+
+for (let key of buttons) {
+    key.onclick = e =>{
+        buttonPressed(key.getAttribute("letter"));
+    }
+}
+
+//todo
+function buttonPressed(str){
+    if(gameover)
+        return;
+
+    if(str === "Backspace"){ //Backspace
+        backspace();
+    }
+    else if(str === "Enter"){ //Enter
+        SubmitGuess();
+    }
+    else {
+        if(REGEX.test(str))
+            addLetterToWORDLE(str);
     }
 }
