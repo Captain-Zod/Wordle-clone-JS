@@ -78,6 +78,27 @@ body{
     flex: 1;
     margin: 0 6px 0 0;
     height: 50px;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #d3d6da;
+    border-radius: 6px;
+}
+
+.key[status='gray']{
+    background-color: gray;
+    color: white;
+}
+
+.key[status='yellow']{
+    background-color: rgb(190, 190, 0);
+    color: white;
+}
+
+.key[status='green']{
+    background-color: green;
+    color: white;
 }
 
 .metakey{

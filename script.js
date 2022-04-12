@@ -39,7 +39,7 @@ function CheckGuess(answer, guess){
         if(answerr[i] == guess[i])
         {
             answerr[i] = '\\';
-            temp.push({index: i, guess: guess[i], result: WordContainsLetter.True});
+            temp.push({index: i, letter: guess[i], result: WordContainsLetter.True});
         }
     }
 
@@ -48,7 +48,7 @@ function CheckGuess(answer, guess){
         if (answerr.includes(guess[i]))
         {
             answerr[answerr.indexOf(guess[i])] = '\\';
-            temp.push({index: i, guess: guess[i], result: WordContainsLetter.InOtherPosition});
+            temp.push({index: i, letter: guess[i], result: WordContainsLetter.InOtherPosition});
         }
     }
 
@@ -56,7 +56,7 @@ function CheckGuess(answer, guess){
     for (let i = 0; i < guess.length; i++) {
         let a = temp.find(item => { return item.index == i});
         if(a == undefined)
-            res.push({index: i, guess: guess[i], result: WordContainsLetter.False});
+            res.push({index: i, letter: guess[i], result: WordContainsLetter.False});
         else
             res.push(a);
     }
@@ -89,6 +89,8 @@ function addLetterToWORDLE(letter){
 
 function backspace(){
     var box = getNextLetterbox();
+    if(box == undefined)
+        return;
     box.innerHTML = "";
     setCellStatus(box, cellStatus.empty);
     WORDLE.pop();
@@ -125,14 +127,24 @@ function SubmitGuess(){
         return;
     if(gameover)
         return;
+    var word = WORDLE.join("").toLowerCase();
+    if(!(wp.includes(word) || pw.includes(word))){
+        alrt("Нет такого слова!");
+        return;
+    }
     var res = CheckGuess(ANSWER, WORDLE);
     console.log(res);
+    a(res);
     var array = getCurrentRow().children;
     for (let i = 0; i < array.length; i++) {
         let cell = array[i];
         setTimeout(() => {
             setCellStatus(cell, letterStatus[res[i].result]);
         }, 300 * i);
+    }
+    if(res.every(x => x.result == WordContainsLetter.True)){
+        gameover = true;
+        alrt("Правильный ответ!");
     }
     WORDLE = [];
     if(CURRENTROWINDEX++ >= 5){
@@ -149,6 +161,14 @@ for (let key of buttons) {
     }
 }
 
+function alrt(str){
+    var alerter = document.getElementById("alerter");
+    alerter.innerText = str;
+    setTimeout(() => {
+        alerter.innerText = "";
+    }, 3000);
+}
+
 //todo
 function buttonPressed(str){
     if(gameover)
@@ -163,5 +183,31 @@ function buttonPressed(str){
     else {
         if(REGEX.test(str))
             addLetterToWORDLE(str);
+    }
+}
+
+//todo refactor this shit!
+function a(list){
+    var arr = Array.from(buttons);
+    var green = list.filter(x => {return x.result == WordContainsLetter.True});
+    for (let item of green) {
+        var key = arr.find(b => {return b.getAttribute("letter") == item.letter});
+        setCellStatus(key, letterStatus[item.result]);
+    }
+
+    var yellow = list.filter(x => {return x.result == WordContainsLetter.InOtherPosition});
+    var empty = arr.filter(b => {return b.getAttribute("status") == undefined});
+    for (let item of yellow) {
+        var key = empty.find(b => {return b.getAttribute("letter") == item.letter});
+        if(key != undefined)
+            setCellStatus(key, letterStatus[item.result]);
+    }
+
+    var gray = list.filter(x => {return x.result == WordContainsLetter.False});
+    empty = arr.filter(b => {return b.getAttribute("status") == undefined});
+    for (let item of gray) {
+        var key = empty.find(b => {return b.getAttribute("letter") == item.letter});
+        if(key != undefined)
+            setCellStatus(key, letterStatus[item.result]);
     }
 }
