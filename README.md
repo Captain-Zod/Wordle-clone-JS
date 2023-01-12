@@ -13,3 +13,6 @@ According to data collected by The New York Times, the most common first guesses
 
 ## Screenshots
 ![Alt text](screeshot-1.png)
+
+## //todo
+Has a bit of shitcode, needs refactoring.
