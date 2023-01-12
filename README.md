@@ -12,7 +12,7 @@ According to data collected by The New York Times, the most common first guesses
 *My clone doesn't has a single daily solution, so refreshing the page will refresh a word to guess. 
 
 ## Screenshots
-![Alt text](screeshot-1.png)
+![Alt text](screenshot-1.png)
 
 ## //todo
 Has a bit of shitcode, needs refactoring.
